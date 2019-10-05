@@ -1,7 +1,7 @@
 var fs = require("fs");
-// var env = require(".env").config();
+// var env = require().config();
 var keys = require("./keys.js");
-// var spotify = require("./spotify.js");
+var Spotify = require("node-spotify-api");
 var axios = require("axios");
 var divider = "----------------------------------------";
 
@@ -50,7 +50,31 @@ function searchBands() {
     });
 }
 
-////////////////////// Spotify Search ////////////////////////
+////////////////////// Spotify Search
+
+function searchSong() {
+  var spotify = new Spotify({
+    id: "d66d00d52a3b44af8580a35a1a195dd6",
+    secret: "2e06595fe40e47ed93a6208e945f9506"
+  });
+
+  spotify.search({ type: "track", query }, function(err, data) {
+    if (err) {
+      return console.log("Error occurred: " + err);
+    }
+
+    console.log(data.tracks.items[0]);
+
+    console.log(
+      data.tracks.items[0].album.artists[0].available_markets.name +
+        " " +
+        data.tracks.items[0].name +
+        " " +
+        data.tracks.items[0].album.external_urls.url +
+        " "
+    );
+  });
+}
 
 /////////////////////// Movie Search /////////////////////////
 function searchShow() {
@@ -108,9 +132,14 @@ if (search === "concert-this") {
 }
 
 if (search === "spotify-this-song") {
-  // use spotify API
+  searchSong();
 }
 
 if (search === "movie-this") {
   searchShow();
 }
+
+// Still needs to....
+// Utilize .env
+// Set default searches (use if statements and check for empty search var)
+// implement do-what-it-says
