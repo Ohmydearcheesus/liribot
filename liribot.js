@@ -12,6 +12,47 @@ var query = process.argv[3];
 // ---------------------- FUNCTIONS --------------------------
 // -----------------------------------------------------------
 
+////////////////////// Concert Search ////////////////////////
+function searchBands() {
+  var queryUrl =
+    "https://rest.bandsintown.com/artists/" +
+    query +
+    "/events?app_id=codingbootcamp";
+
+  axios
+    .get(queryUrl)
+    .then(function(response) {
+      console.log(
+        "Venue Name : " +
+          response.data[0].venue.name +
+          "\n\nVenue Location: " +
+          response.data[0].venue.city +
+          ", " +
+          response.data[0].venue.country +
+          "\n\nEvent Date: " +
+          response.data[0].datetime
+      );
+    })
+    .catch(function(error) {
+      if (error.response) {
+        console.log("---------------Data---------------");
+        console.log(error.response.data);
+        console.log("---------------Status---------------");
+        console.log(error.response.status);
+        console.log("---------------Status---------------");
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    });
+}
+
+////////////////////// Spotify Search ////////////////////////
+
+/////////////////////// Movie Search /////////////////////////
 function searchShow() {
   var queryUrl =
     "http://www.omdbapi.com/?t=" + query + "&y=&plot=short&apikey=trilogy";
@@ -62,14 +103,14 @@ function searchShow() {
 // -------------------- RUN APP LOGIC ------------------------
 // -----------------------------------------------------------
 
-if ((search = "concert-this")) {
-  // use bandsintown API
+if (search === "concert-this") {
+  searchBands();
 }
 
-if ((search = "spotify-this-song")) {
+if (search === "spotify-this-song") {
   // use spotify API
 }
 
-if ((search = "movie-this")) {
+if (search === "movie-this") {
   searchShow();
 }
